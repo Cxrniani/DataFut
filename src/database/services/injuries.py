@@ -1,6 +1,5 @@
 from DataFut.src.database.utils.db_connection import get_db_connection
 
-
 def insert_injury(fixture_id, player_name, team_name, injury_reason, injury_type):
     conn = get_db_connection()
     cursor = conn.cursor()
