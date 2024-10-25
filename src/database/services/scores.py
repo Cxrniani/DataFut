@@ -1,5 +1,5 @@
-from DataFut.src.database.utils.db_connection import get_db_connection
-from DataFut.src.database.utils.data_verification import record_exists
+from ..utils.db_connection import get_db_connection
+from ..utils.data_verification import record_exists
 
 def insert_score(fixture_id, halftime_home, halftime_away, fulltime_home, fulltime_away, extratime_home, extratime_away, penalty_home, penalty_away):
     if not record_exists("SELECT 1 FROM scores WHERE fixture_id = ?", (fixture_id,)):

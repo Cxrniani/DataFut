@@ -1,5 +1,5 @@
-from DataFut.src.database.utils.db_connection import get_db_connection
-from DataFut.src.database.utils.data_verification import record_exists
+from ..utils.db_connection import get_db_connection
+from ..utils.data_verification import record_exists
 
 def insert_injury(fixture_id, player_name, team_name, injury_reason, injury_type):
     if not record_exists("SELECT 1 FROM injuries WHERE fixture_id = ? AND player_name = ?", (fixture_id, player_name)):

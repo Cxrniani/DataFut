@@ -1,4 +1,4 @@
-from DataFut.src.database.utils.db_connection import get_db_connection
+from .db_connection import get_db_connection
 
 def record_exists(query, params):
     conn = get_db_connection()
