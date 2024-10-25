@@ -51,7 +51,10 @@ for fixture in data.get('response', []):
     referee = fixture.get('referee', 'Árbitro não disponível')
     status = fixture['fixture']['status']['short']
     
-    insert_fixture(fixture_id, home_team, away_team, formatted_date, venue_name, venue_city, referee, status)
+    if insert_fixture(fixture_id, home_team, away_team, formatted_date, venue_name, venue_city, referee, status):
+        print(f"Fixture inserido: {home_team} vs {away_team} em {venue_name}, {venue_city}, árbitro: {referee}")
+    else:
+        print(f"Fixture já existente: {home_team} vs {away_team}")
 
     # Classificação dos times
     standings_url = "https://api-football-v1.p.rapidapi.com/v3/standings"
@@ -65,9 +68,11 @@ for fixture in data.get('response', []):
     if standings_data.get('response'):
         for standing in standings_data['response'][0]['league']['standings'][0]:
             if standing['team']['id'] == fixture['teams']['home']['id']:
-                insert_standing(fixture_id, home_team, standing['rank'])
+                if insert_standing(fixture_id, home_team, standing['rank']):
+                    print(f"Classificação inserida: {home_team} na posição {standing['rank']}")
             if standing['team']['id'] == fixture['teams']['away']['id']:
-                insert_standing(fixture_id, away_team, standing['rank'])
+                if insert_standing(fixture_id, away_team, standing['rank']):
+                    print(f"Classificação inserida: {away_team} na posição {standing['rank']}")
 
     # Verificar o status da partida
     if status != 'NS':  # Verificar se o jogo já começou (diferente de 'Not Started')
@@ -77,11 +82,16 @@ for fixture in data.get('response', []):
         extratime_score = fixture['score']['extratime']
         penalty_score = fixture['score']['penalty']
         
-        insert_score(fixture_id, 
-                     halftime_score['home'], halftime_score['away'],
-                     fulltime_score['home'], fulltime_score['away'],
-                     extratime_score['home'], extratime_score['away'],
-                     penalty_score['home'], penalty_score['away'])
+        if insert_score(fixture_id, 
+                        halftime_score['home'], halftime_score['away'],
+                        fulltime_score['home'], fulltime_score['away'],
+                        extratime_score['home'], extratime_score['away'],
+                        penalty_score['home'], penalty_score['away']):
+            print(f"Placar inserido para o fixture {fixture_id}:")
+            print(f"  Intervalo: {halftime_score['home']} - {halftime_score['away']}")
+            print(f"  Tempo Completo: {fulltime_score['home']} - {fulltime_score['away']}")
+            print(f"  Tempo Extra: {extratime_score['home']} - {extratime_score['away']}")
+            print(f"  Pênaltis: {penalty_score['home']} - {penalty_score['away']}")
 
         # Cartões - acessar eventos para verificar cartões
         url_events = f"https://api-football-v1.p.rapidapi.com/v3/fixtures/events?fixture={fixture_id}"
@@ -94,7 +104,8 @@ for fixture in data.get('response', []):
                     player_name = event['player']['name']
                     card_type = event['detail']  # Yellow Card / Red Card
                     team_name = event['team']['name']
-                    insert_card(fixture_id, player_name, team_name, card_type)
+                    if insert_card(fixture_id, player_name, team_name, card_type):
+                        print(f"Cartão inserido: {team_name} - {player_name} ({card_type})")
 
         # Lesões - acessar o endpoint de lesões
         injuries_url = "https://api-football-v1.p.rapidapi.com/v3/injuries"
@@ -110,8 +121,9 @@ for fixture in data.get('response', []):
                 team_name = injury['team']['name']
                 injury_reason = injury.get('reason', 'Motivo não disponível')
                 injury_type = injury.get('type', 'Tipo não disponível')
-                insert_injury(fixture_id, player_name, team_name, injury_reason, injury_type)
+                if insert_injury(fixture_id, player_name, team_name, injury_reason, injury_type):
+                    print(f"Lesão inserida: {team_name} - {player_name}, Motivo: {injury_reason}, Tipo: {injury_type}")
     else:
-        print("O jogo ainda não começou.")
+        print(f"O jogo {fixture_id} ainda não começou.")
 
     print('-' * 40)
