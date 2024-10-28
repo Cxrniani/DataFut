@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from dateutil import parser
 from dotenv import load_dotenv
 import os
+from ..database import *
 from database.services.fixtures import insert_fixture
 from database.services.scores import insert_score
 from database.services.standings import insert_standing
