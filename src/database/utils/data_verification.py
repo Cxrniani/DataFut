@@ -1,9 +1,9 @@
 from .db_connection import get_db_connection
 
 def record_exists(query, params):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute(query, params)
-    result = cursor.fetchone()
-    conn.close()
-    return result is not None
+    with get_db_connection() as conn:
+        cursor = conn.cursor()
+        # Mudar ? para %s no MySQL
+        query = query.replace('?', '%s')
+        cursor.execute(query, params)
+        return cursor.fetchone() is not None
