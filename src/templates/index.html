@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixtures</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .fixture-details { display: none; }
+        .fixture-item { background-color: orange; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <header style="background-color: orange; padding: 10px; text-align: center;">
+        <h1>DataFut - Projeto para vaga THM Estatística</h1>
+    </header>
+    <ul>
+        {% for fixture in fixtures %}
+        <li class="fixture-item">
+            <strong>{{ fixture.home_team }} vs {{ fixture.away_team }}</strong> on {{ fixture.fixture_date }}
+            <button onclick="loadFixtureDetails({{ fixture.id }})">Show Details</button>
+            <div id="details-{{ fixture.id }}" class="fixture-details">
+                <p>Loading...</p>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    
+    <script>
+        function loadFixtureDetails(fixtureId) {
+            const detailsDiv = document.getElementById(`details-${fixtureId}`);
+            detailsDiv.style.display = "block";
+            fetch(`/fixture/${fixtureId}`)
+                .then(response => response.json())
+                .then(data => {
+                    detailsDiv.innerHTML = `
+                        <p><strong>Halftime:</strong> ${data.score.halftime_home} - ${data.score.halftime_away}</p>
+                        <p><strong>Fulltime:</strong> ${data.score.fulltime_home} - ${data.score.fulltime_away}</p>
+                        <p><strong>Venue:</strong> ${data.standings.venue_name}, ${data.standings.venue_city}</p>
+                        <p><strong>Referee:</strong> ${data.standings.referee}</p>
+                        <p><strong>Cards:</strong> ${data.cards.map(card => card.player_name + ' (' + card.card_type + ')').join(', ')}</p>
+                        <p><strong>Injuries:</strong> ${data.injuries.map(injury => injury.player_name + ' (' + injury.injury_reason + ')').join(', ')}</p>
+                    `;
+                })
+                .catch(error => {
+                    detailsDiv.innerHTML = "<p>Error loading details.</p>";
+                    console.error('Error fetching fixture details:', error);
+                });
+        }
+    </script>
+</body>
+</html>
