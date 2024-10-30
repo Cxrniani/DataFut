@@ -14,8 +14,8 @@
     <main>
         <section class="fixtures-container">
             <h2>Lista de Jogos</h2>
-            <ul class="fixture-list">
-                {% for fixture in fixtures %}
+            <ul class="fixture-list" id="fixture-list">
+                {% for fixture in fixtures[:5] %}
                 <li class="fixture-item">
                     <div class="fixture-summary">
                         <strong class="fixture-teams">{{ fixture.home_team }} vs {{ fixture.away_team }}</strong>
@@ -28,14 +28,47 @@
                 </li>
                 {% endfor %}
             </ul>
+            <button id="load-more" onclick="loadMoreFixtures()">Ver Mais</button>
         </section>
     </main>
     
     <footer>
-        <p>&copy; 2024 DataFut.</p>
+        <p>&copy; 2024 DataFut. Todos os direitos reservados.</p>
     </footer>
 
     <script>
+        let fixtures = {{ fixtures | tojson }}; // Converte a lista de fixtures em um objeto JSON
+        let currentIndex = 5; // Começa a partir do 5º item
+
+        function loadMoreFixtures() {
+            const fixtureList = document.getElementById('fixture-list');
+            const loadMoreButton = document.getElementById('load-more');
+            
+            for (let i = currentIndex; i < currentIndex + 5 && i < fixtures.length; i++) {
+                const fixture = fixtures[i];
+                const listItem = document.createElement('li');
+                listItem.className = 'fixture-item';
+                listItem.innerHTML = `
+                    <div class="fixture-summary">
+                        <strong class="fixture-teams">${fixture.home_team} vs ${fixture.away_team}</strong>
+                        <span class="fixture-date">${fixture.fixture_date}</span>
+                        <button onclick="toggleFixtureDetails(${fixture.id})">Show Details</button>
+                    </div>
+                    <div id="details-${fixture.id}" class="fixture-details">
+                        <p>Loading...</p>
+                    </div>
+                `;
+                fixtureList.appendChild(listItem);
+            }
+
+            currentIndex += 5; // Atualiza o índice atual
+
+            // Esconde o botão se não houver mais fixtures para carregar
+            if (currentIndex >= fixtures.length) {
+                loadMoreButton.style.display = 'none';
+            }
+        }
+
         function toggleFixtureDetails(fixtureId) {
             const detailsDiv = document.getElementById(`details-${fixtureId}`);
             const button = event.currentTarget; // Captura o botão clicado

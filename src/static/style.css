@@ -96,3 +96,20 @@ footer {
     background-color: #f4f4f4;
     margin-top: 2rem;
 }
+
+#load-more {
+    background-color: #ff6a00; /* Cor de fundo do botão */
+    color: white; /* Cor do texto */
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 1rem 0; /* Espaçamento acima e abaixo */
+    display: inline-block; /* Permite o alinhamento de bloco */
+    transition: background-color 0.2s; /* Efeito de transição */
+}
+
+#load-more:hover {
+    background-color: #e55b00; /* Cor de fundo mais escura ao passar o mouse */
+}
