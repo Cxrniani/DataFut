@@ -22,3 +22,25 @@ def insert_score(fixture_id, halftime_home, halftime_away, fulltime_home, fullti
     except Exception as e:
         print(f"Error inserting score: {e}")
         return False
+
+def get_score(fixture_id):
+    try:
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT halftime_home, halftime_away, fulltime_home, fulltime_away, extratime_home, extratime_away, penalty_home, penalty_away FROM scores WHERE fixture_id = %s", (fixture_id,))
+            score = cursor.fetchone()
+            if score:
+                return {
+                    'halftime_home': score[0],
+                    'halftime_away': score[1],
+                    'fulltime_home': score[2],
+                    'fulltime_away': score[3],
+                    'extratime_home': score[4],
+                    'extratime_away': score[5],
+                    'penalty_home': score[6],
+                    'penalty_away': score[7]
+                }
+            return None
+    except Exception as e:
+        print(f"Error fetching score: {e}")
+        return None

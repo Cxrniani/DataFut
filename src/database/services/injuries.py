@@ -23,9 +23,6 @@ def insert_injury(fixture_id, player_name, team_name, injury_reason, injury_type
         conn = get_db_connection()
         cursor = conn.cursor()
         
-        # Depuração: imprimindo os dados para verificar possíveis inconsistências
-        print(f"Inserindo lesão para fixture_id={fixture_id}, player_name={player_name}, team_name={team_name}, injury_reason={injury_reason}, injury_type={injury_type}")
-        
         # Checando se o registro já existe
         cursor.execute(
             "SELECT 1 FROM injuries WHERE fixture_id = %s AND player_name = %s AND team_name = %s",

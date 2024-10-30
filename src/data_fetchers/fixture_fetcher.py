@@ -19,22 +19,26 @@ def fetch_fixtures(league_id, season):
     return response.json().get('response', [])
 
 def process_fixture(fixture):
-    # Process and return fixture data
+    # Processa e retorna os dados do fixture
     home_team = fixture['teams']['home']['name']
     away_team = fixture['teams']['away']['name']
     fixture_id = fixture['fixture']['id']
     iso_date = fixture['fixture']['date']
     formatted_date = parser.isoparse(iso_date).strftime('%d/%m/%Y')
-    venue_name = fixture.get('venue', {}).get('name', 'Estádio não disponível')
-    venue_city = fixture.get('venue', {}).get('city', 'Cidade não disponível')
-    referee = fixture.get('referee', 'Árbitro não disponível')
+    fixture_date = parser.isoparse(iso_date).date()
+
+    # Corrigindo a referência ao 'venue' e 'referee' dentro de 'fixture'
+    venue_name = fixture['fixture']['venue']['name'] if 'venue' in fixture['fixture'] else 'Estádio não disponível'
+    venue_city = fixture['fixture']['venue']['city'] if 'venue' in fixture['fixture'] else 'Cidade não disponível'
+    referee = fixture['fixture']['referee'] if 'referee' in fixture['fixture'] else 'Árbitro não disponível'
+    
     status = fixture['fixture']['status']['short']
 
     return {
         'id': fixture_id,
         'home_team': home_team,
         'away_team': away_team,
-        'fixture_date': formatted_date,
+        'fixture_date': fixture_date,
         'venue_name': venue_name,
         'venue_city': venue_city,
         'referee': referee,
