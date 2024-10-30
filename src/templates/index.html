@@ -5,47 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fixtures</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <style>
-        .fixture-details { display: none; }
-        .fixture-item { background-color: orange; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
-    </style>
 </head>
 <body>
-    <header style="background-color: orange; padding: 10px; text-align: center;">
+    <header class="top-bar">
         <h1>DataFut - Projeto para vaga THM Estatística</h1>
     </header>
-    <ul>
-        {% for fixture in fixtures %}
-        <li class="fixture-item">
-            <strong>{{ fixture.home_team }} vs {{ fixture.away_team }}</strong> on {{ fixture.fixture_date }}
-            <button onclick="loadFixtureDetails({{ fixture.id }})">Show Details</button>
-            <div id="details-{{ fixture.id }}" class="fixture-details">
-                <p>Loading...</p>
-            </div>
-        </li>
-        {% endfor %}
-    </ul>
     
+    <main>
+        <section class="fixtures-container">
+            <h2>Lista de Jogos</h2>
+            <ul class="fixture-list">
+                {% for fixture in fixtures %}
+                <li class="fixture-item">
+                    <div class="fixture-summary">
+                        <strong class="fixture-teams">{{ fixture.home_team }} vs {{ fixture.away_team }}</strong>
+                        <span class="fixture-date">{{ fixture.fixture_date }}</span>
+                        <button onclick="toggleFixtureDetails({{ fixture.id }})">Show Details</button>
+                    </div>
+                    <div id="details-{{ fixture.id }}" class="fixture-details">
+                        <p>Loading...</p>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 DataFut.</p>
+    </footer>
+
     <script>
-        function loadFixtureDetails(fixtureId) {
+        function toggleFixtureDetails(fixtureId) {
             const detailsDiv = document.getElementById(`details-${fixtureId}`);
-            detailsDiv.style.display = "block";
-            fetch(`/fixture/${fixtureId}`)
-                .then(response => response.json())
-                .then(data => {
-                    detailsDiv.innerHTML = `
-                        <p><strong>Halftime:</strong> ${data.score.halftime_home} - ${data.score.halftime_away}</p>
-                        <p><strong>Fulltime:</strong> ${data.score.fulltime_home} - ${data.score.fulltime_away}</p>
-                        <p><strong>Venue:</strong> ${data.standings.venue_name}, ${data.standings.venue_city}</p>
-                        <p><strong>Referee:</strong> ${data.standings.referee}</p>
-                        <p><strong>Cards:</strong> ${data.cards.map(card => card.player_name + ' (' + card.card_type + ')').join(', ')}</p>
-                        <p><strong>Injuries:</strong> ${data.injuries.map(injury => injury.player_name + ' (' + injury.injury_reason + ')').join(', ')}</p>
-                    `;
-                })
-                .catch(error => {
-                    detailsDiv.innerHTML = "<p>Error loading details.</p>";
-                    console.error('Error fetching fixture details:', error);
-                });
+            const button = event.currentTarget; // Captura o botão clicado
+            
+            if (detailsDiv.style.display === "block") {
+                detailsDiv.style.display = "none"; // Esconde detalhes
+                button.textContent = "Show Details"; // Altera o texto do botão
+            } else {
+                detailsDiv.style.display = "block"; // Mostra detalhes
+                button.textContent = "Hide Details"; // Altera o texto do botão
+                fetch(`/fixture/${fixtureId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        detailsDiv.innerHTML = `
+                            <p><strong>Halftime:</strong> ${data.score.halftime_home} - ${data.score.halftime_away}</p>
+                            <p><strong>Fulltime:</strong> ${data.score.fulltime_home} - ${data.score.fulltime_away}</p>
+                            <p><strong>Venue:</strong> ${data.fixture.venue_name}, ${data.fixture.venue_city}</p>
+                            <p><strong>Referee:</strong> ${data.fixture.referee}</p>
+                            <p><strong>Status:</strong> ${data.fixture.status}</p>
+                            <p><strong>Cards:</strong> ${data.cards.map(card => card.player_name + ' (' + card.card_type + ')').join(', ')}</p>
+                            <p><strong>Injuries:</strong> ${data.injuries.map(injury => injury.player_name + ' (Injury: ' + injury.injury_reason + '; Type: ' + injury.injury_type +')').join(', ')}</p>
+                        `;
+                    })
+                    .catch(error => {
+                        detailsDiv.innerHTML = "<p>Error loading details.</p>";
+                        console.error('Error fetching fixture details:', error);
+                    });
+            }
         }
     </script>
 </body>
