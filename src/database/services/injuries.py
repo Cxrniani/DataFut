@@ -23,7 +23,6 @@ def insert_injury(fixture_id, player_name, team_name, injury_reason, injury_type
         conn = get_db_connection()
         cursor = conn.cursor()
         
-        # Checando se o registro já existe
         cursor.execute(
             "SELECT 1 FROM injuries WHERE fixture_id = %s AND player_name = %s AND team_name = %s",
             (fixture_id, player_name, team_name)
@@ -31,7 +30,6 @@ def insert_injury(fixture_id, player_name, team_name, injury_reason, injury_type
         exists = cursor.fetchone()
         
         if not exists:
-            # Inserindo a lesão com os placeholders corretos
             cursor.execute('''
                 INSERT INTO injuries (fixture_id, player_name, team_name, injury_reason, injury_type) 
                 VALUES (%s, %s, %s, %s, %s)
@@ -44,7 +42,7 @@ def insert_injury(fixture_id, player_name, team_name, injury_reason, injury_type
             print(f"Lesão já existente para o jogador {player_name}")
             return False
     except Exception as e:
-        print(f"Erro ao inserir lesão: {e}")  # Tratamento de erro para depuração
+        print(f"Erro ao inserir lesão: {e}") 
         return False
     finally:
         if conn:

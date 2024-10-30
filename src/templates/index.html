@@ -37,8 +37,8 @@
     </footer>
 
     <script>
-        let fixtures = {{ fixtures | tojson }}; // Converte a lista de fixtures em um objeto JSON
-        let currentIndex = 5; // Começa a partir do 5º item
+        let fixtures = {{ fixtures | tojson }};
+        let currentIndex = 5; 
 
         function loadMoreFixtures() {
             const fixtureList = document.getElementById('fixture-list');
@@ -61,9 +61,8 @@
                 fixtureList.appendChild(listItem);
             }
 
-            currentIndex += 5; // Atualiza o índice atual
+            currentIndex += 5; 
 
-            // Esconde o botão se não houver mais fixtures para carregar
             if (currentIndex >= fixtures.length) {
                 loadMoreButton.style.display = 'none';
             }
@@ -71,14 +70,14 @@
 
         function toggleFixtureDetails(fixtureId) {
             const detailsDiv = document.getElementById(`details-${fixtureId}`);
-            const button = event.currentTarget; // Captura o botão clicado
+            const button = event.currentTarget; 
             
             if (detailsDiv.style.display === "block") {
-                detailsDiv.style.display = "none"; // Esconde detalhes
-                button.textContent = "Show Details"; // Altera o texto do botão
+                detailsDiv.style.display = "none"; 
+                button.textContent = "Show Details";
             } else {
-                detailsDiv.style.display = "block"; // Mostra detalhes
-                button.textContent = "Hide Details"; // Altera o texto do botão
+                detailsDiv.style.display = "block"; 
+                button.textContent = "Hide Details";
                 fetch(`/fixture/${fixtureId}`)
                     .then(response => response.json())
                     .then(data => {

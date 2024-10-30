@@ -17,16 +17,14 @@ def fixture_details(fixture_id):
     score = get_score(fixture_id)
     fixtures = get_all_fixtures()
     
-    # Procura a fixture com o ID fornecido
     fixture = next((f for f in fixtures if f['id'] == fixture_id), None)
 
     cards = get_cards(fixture_id)
     injuries = get_injuries(fixture_id)
 
-    # Retorna os detalhes da fixture e as informações adicionais
     return jsonify({
         'score': score,
-        'fixture': fixture,  # Incluindo os detalhes da fixture
+        'fixture': fixture,
         'cards': cards,
         'injuries': injuries
     })
