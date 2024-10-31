@@ -1,6 +1,7 @@
 # ⚽ DataFut
 
 DataFut é uma aplicação para coletar e processar dados de futebol da UEFA Champions League (ou demais ligas, basta mudar o parâmetro no código), utilizando a API: API-FOOTBALL (Disponível no Rapid-API).
+
 O código utiliza de funções como Amazon RDS para armazenar os dados e AWS Lambda para executar as tarefas de coleta e processamento de dados com uma rotina diária de forma remota, e o framework Flask para construir a interface web, até o momento armazenada localmente.
 
 ## 🚀 Funcionalidades
@@ -62,7 +63,9 @@ O projeto está organizado em módulos:
 
 ## 🔧 Configuração
 
-Atualmente, o projeto está configurado para a UEFA Champions League (LEAGUE_ID = "2") e para a temporada 2024 (SEASON = "2024"). Porém isso pode ser alterado para outras ligas ou temporadas.
+Atualmente, o projeto está configurado para a UEFA Champions League (LEAGUE_ID = "2") e para a temporada 2024 (SEASON = "2024"). 
+
+(Isso pode ser alterado para outras ligas ou temporadas alterando os parâmetros no código.)
 
 ## 🤝 Contribuindo
 
