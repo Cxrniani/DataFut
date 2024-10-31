@@ -2,7 +2,7 @@
 
 DataFut é uma aplicação para coletar e processar dados de futebol da UEFA Champions League (ou demais ligas, basta mudar o parâmetro no código), utilizando a API: API-FOOTBALL (Disponível no Rapid-API).
 
-O código utiliza de funções como Amazon RDS para armazenar os dados e AWS Lambda para executar as tarefas de coleta e processamento de dados com uma rotina diária de forma remota, e o framework Flask para construir a interface web, até o momento armazenada localmente.
+O código utiliza de serviços como Amazon RDS para armazenar os dados e AWS Lambda integrado ao Amazon EventBridge para executar as tarefas de coleta e processamento de dados com uma rotina diária de forma remota, e o framework Flask para construir a interface web, até o momento armazenada localmente.
 
 ## 🚀 Funcionalidades
 
@@ -36,11 +36,19 @@ O projeto está organizado em módulos:
 
 ### 🌟 Arquitetura
 
-![Arquitetura do Projeto](architeture.png)
+![Arquitetura do Projeto](images/architeture.png)
 
 ### 🗄️ Mapa Relacional do Banco de Dados
 
-![Mapa Relacional do Banco de Dados](DataFut-EERDiagram.png)
+![Mapa Relacional do Banco de Dados](images/DataFut-EERDiagram.png)
+
+## 🖥️ Interface Web
+
+A interface web Flask é executada localmente. Para visualizar os dados coletados.
+
+![Interface Web](images/interface1.png)
+
+![Interface Web](images/interface2.png)
 
 ## 🔍 Como Funciona
 
