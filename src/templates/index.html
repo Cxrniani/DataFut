@@ -40,6 +40,15 @@
         let fixtures = {{ fixtures | tojson }};
         let currentIndex = 5; 
 
+        // Função para formatar datas para o padrão YYYY-MM-DD
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
         function loadMoreFixtures() {
             const fixtureList = document.getElementById('fixture-list');
             const loadMoreButton = document.getElementById('load-more');
@@ -51,7 +60,7 @@
                 listItem.innerHTML = `
                     <div class="fixture-summary">
                         <strong class="fixture-teams">${fixture.home_team} vs ${fixture.away_team}</strong>
-                        <span class="fixture-date">${fixture.fixture_date}</span>
+                        <span class="fixture-date">${formatDate(fixture.fixture_date)}</span>
                         <button onclick="toggleFixtureDetails(${fixture.id})">Show Details</button>
                     </div>
                     <div id="details-${fixture.id}" class="fixture-details">
@@ -81,15 +90,25 @@
                 fetch(`/fixture/${fixtureId}`)
                     .then(response => response.json())
                     .then(data => {
-                        detailsDiv.innerHTML = `
-                            <p><strong>Halftime:</strong> ${data.score.halftime_home} - ${data.score.halftime_away}</p>
-                            <p><strong>Fulltime:</strong> ${data.score.fulltime_home} - ${data.score.fulltime_away}</p>
+                        let detailsHTML = `
                             <p><strong>Venue:</strong> ${data.fixture.venue_name}, ${data.fixture.venue_city}</p>
                             <p><strong>Referee:</strong> ${data.fixture.referee}</p>
                             <p><strong>Status:</strong> ${data.fixture.status}</p>
-                            <p><strong>Cards:</strong> ${data.cards.map(card => card.player_name + ' (' + card.card_type + ')').join(', ')}</p>
-                            <p><strong>Injuries:</strong> ${data.injuries.map(injury => injury.player_name + ' (Injury: ' + injury.injury_reason + '; Type: ' + injury.injury_type +')').join(', ')}</p>
                         `;
+
+                        // Verifica se o jogo já terminou para exibir o placar e eventos
+                        if (data.fixture.status === 'FT') {
+                            detailsHTML += `
+                                <p><strong>Halftime:</strong> ${data.score.halftime_home} - ${data.score.halftime_away}</p>
+                                <p><strong>Fulltime:</strong> ${data.score.fulltime_home} - ${data.score.fulltime_away}</p>
+                                <p><strong>Cards:</strong> ${data.cards.map(card => card.player_name + ' (' + card.card_type + ')').join(', ')}</p>
+                                <p><strong>Injuries:</strong> ${data.injuries.map(injury => injury.player_name + ' (Injury: ' + injury.injury_reason + '; Type: ' + injury.injury_type +')').join(', ')}</p>
+                            `;
+                        } else {
+                            detailsHTML += `<p>Mais detalhes da partida estarão disponíveis após o jogo</p>`;
+                        }
+
+                        detailsDiv.innerHTML = detailsHTML;
                     })
                     .catch(error => {
                         detailsDiv.innerHTML = "<p>Error loading details.</p>";
