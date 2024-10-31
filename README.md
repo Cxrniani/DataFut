@@ -32,7 +32,7 @@ O projeto está organizado em módulos:
 
 ### 🌟 Arquitetura
 
-![Arquitetura do Projeto](DataFut\architeture.png)
+![Arquitetura do Projeto](architeture.png)
 
 ## 🔍 Como Funciona
 
