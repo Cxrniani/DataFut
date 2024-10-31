@@ -37,7 +37,7 @@ O projeto está organizado em módulos:
 
 ### 🗄️ Mapa Relacional do Banco de Dados
 
-![Arquitetura do Projeto](database/DataFut-EERDiagram.png)
+![Mapa Relacional do Banco de Dados](DataFut-EERDiagram.png)
 
 ## 🔍 Como Funciona
 
