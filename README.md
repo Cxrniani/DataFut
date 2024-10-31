@@ -35,6 +35,10 @@ O projeto está organizado em módulos:
 
 ![Arquitetura do Projeto](architeture.png)
 
+### 🗄️ Mapa Relacional do Banco de Dados
+
+![Arquitetura do Projeto](database/DataFut-EERDiagram.png)
+
 ## 🔍 Como Funciona
 
 1. A função Lambda é acionada diariamente pelo EventBridge
@@ -73,7 +77,7 @@ Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar
 
 ## 📝 Licença
 
-MIT License © 2024
+MIT License © 2024 Matheus Corniani, DataFut.
 
 ---
 
