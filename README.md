@@ -27,9 +27,12 @@ O projeto está organizado em módulos:
 
 - `data_fetchers/`: Módulos para buscar dados da API
 - `database/services/`: Serviços para interação com o banco de dados
+- `database/utils/`: Utilidades para conectar-se com o banco de dados e formatação de datas
 - `lambda_handler.py`: Função lambda a ser inserida no console AWS
-- `app.py`: Interface web Flask para visualizar os dados coletados
 - `main.py`: Pode ser usada para testar o código localmente, tem o mesmo conteúdo da lambda, porém com depuração.
+- `app.py`: Interface web Flask para integrar o back-end ao front-end
+- `templates/`: Pasta com os templates HTML da interface web
+-  `static/`: Pasta com os estilos CSS da interface web	
 
 ### 🌟 Arquitetura
 
